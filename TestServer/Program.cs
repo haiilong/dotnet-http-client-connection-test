@@ -22,7 +22,6 @@ app.Use(async (context, next) =>
     var connectionId = context.Connection.Id;
     var remoteEndpoint = context.Connection.RemoteIpAddress + ":" + context.Connection.RemotePort;
     
-    Console.WriteLine(context.Request.Protocol);
     connectionTracker.RecordRequest(connectionId, remoteEndpoint);
     
     await next();
