@@ -1,6 +1,6 @@
 using System.Net;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using TestServer;
+using TestServer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddSingleton(connectionTracker);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Listen(IPAddress.Any, 5000, listenOptions =>
+    options.Listen(IPAddress.Any, ServerConfiguration.DefaultPort, listenOptions =>
     {
         listenOptions.UseConnectionLogging();
     });
@@ -28,7 +28,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.MapGet("/api/test", (ConnectionTracker tracker, HttpContext context) =>
+app.MapGet(ServerConfiguration.ApiTestEndpoint, (ConnectionTracker tracker, HttpContext context) =>
 {
     var connectionId = context.Connection.Id;
     var info = tracker.GetConnectionInfo(connectionId);

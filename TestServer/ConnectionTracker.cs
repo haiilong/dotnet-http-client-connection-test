@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using TestServer.Utils;
 
 namespace TestServer;
 
@@ -17,26 +18,11 @@ public class ConnectionTracker
             });
 
         var info = _connections[connectionId];
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Connection {connectionId[^3..]}, {GetOrdinalSuffix(info.RequestCount)} Request from {remoteEndpoint}");
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Connection {connectionId[^3..]}, {OrdinalHelper.GetOrdinalSuffix(info.RequestCount)} Request from {remoteEndpoint}");
     }
 
     public ConnectionInfo GetConnectionInfo(string connectionId)
     {
         return _connections[connectionId];
-    }
-    
-    private static string GetOrdinalSuffix(int number)
-    {
-        return (number % 100) switch
-        {
-            11 or 12 or 13 => $"{number}th",
-            _ => (number % 10) switch
-            {
-                1 => $"{number}st",
-                2 => $"{number}nd",
-                3 => $"{number}rd",
-                _ => $"{number}th",
-            }
-        };
     }
 }

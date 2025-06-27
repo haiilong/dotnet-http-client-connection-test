@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using System.Text.Json;
+using TestClient.Constants;
 
 namespace TestClient;
 
@@ -10,12 +10,12 @@ public class TestApiClient
     public TestApiClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri("http://localhost:5000");
+        _httpClient.BaseAddress = new Uri(AppConstants.ServerBaseUrl);
     }
 
     public async Task<TestResponse> GetTestDataAsync()
     {
-        var response = await _httpClient.GetStringAsync("/api/test");
-        return JsonSerializer.Deserialize<TestResponse>(response,  new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
+        var response = await _httpClient.GetStringAsync(AppConstants.TestEndpoint);
+        return JsonSerializer.Deserialize<TestResponse>(response, AppConstants.JsonOptions)!;
     }
 }
